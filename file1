@@ -1,0 +1,12 @@
+Je m'appele Shanley
+y
+oui
+Ouvrir un fichier temporaire avec O_CREAT, O_WRONLY, O_TRUNC et permissions 644.
+Lire chaque ligne de l’entrée standard en boucle.
+Comparer chaque ligne au LIMITER, le second argument qu’on a reçu :
+si la ligne est identique au délimiteur, sortir de la boucle,
+si la ligne est différente, l’écrire dans notre fichier temporaire.
+Fermer le fichier temporaire.
+Ouvrir le fichier temporaire en mode O_RDONLY.
+Dup2 le fd du fichier temporaire sur l’entrée standard.
+Lancer pipex.

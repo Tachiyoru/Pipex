@@ -1,0 +1,4 @@
+*.o
+pipex
+pipex_bonus
+.vscode
