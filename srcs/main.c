@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 16:06:40 by sleon             #+#    #+#             */
-/*   Updated: 2022/11/28 18:12:24 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/01 12:33:10 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*pipex;
 
-	if (*envp == NULL)
-		return (msg("Env not found"), 0);
 	if (argc < 5)
 	{
 		msg("Pipex run as: ./pipex infile cmd1 ... cmdX outfile");
@@ -31,6 +29,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	main_exec(pipex);
 	free_struct(pipex);
+	dprintf(STDERR_FILENO, "ok\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -81,6 +80,11 @@ void	setup_redir(t_pipex *pipex)
 			return ;
 		pipex->fd[OUT] = fd;
 	}
+	else if (pipex->type_redir == HEREDOC)
+	{
+		fd = heredoc(pipex->redir);
+		pipex->fd[IN] = fd;
+	}
 	return ;
 }
 
@@ -105,10 +109,12 @@ int	exec(t_pipex *pipex)
 			dup2(pipex->fd[OUT], STDOUT_FILENO);
 			close(pipex->fd[OUT]);
 		}
+		// dprintf(STDERR_FILENO, "%s\n", pipex->cmd);
 		if (pipex->cmd == NULL)
 			return (msg("Execve failed"), exit(1), false);
 		else
 			execve(pipex->cmd, pipex->cmd_detail, pipex->env);
+		perror("Error ");
 	}
 	return (true);
 }

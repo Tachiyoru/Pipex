@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 15:47:09 by sleon             #+#    #+#             */
-/*   Updated: 2022/11/28 17:56:53 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/01 11:36:49 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ enum e_fd{
 	IN,
 	OUT,
 	MAX_FD,
+	HEREDOC,
 };
 
 struct s_pipex
 {
 	pid_t	pid;
 	int		fd[MAX_FD];
-	int		heredoc;
 	char	*path;
 	char	*cmd;
 	char	**cmd_detail;
@@ -56,7 +56,7 @@ void		msg(char *str);
 
 //here-doc
 int			is_heredoc(char *arg, t_pipex *pipex, char **envp);
-void		heredoc(char *limiter, t_pipex *pipex);
+int			heredoc(char *limiter);
 
 //split
 char		**ft_split(char	*str, char set);
@@ -72,6 +72,8 @@ int			main(int argc, char **argv, char **envp);
 void		main_exec(t_pipex *pipex);
 void		setup_redir(t_pipex *pipex);
 int			exec(t_pipex *pipex);
+
+int	init_struct2(t_pipex **node, char **envp, char *cmd, int i);
 
 //struct
 int			fill_strct(t_pipex **pipex, int ac, char **argv, char **envp);
