@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:03:23 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/01 12:50:08 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/01 13:12:19 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ int	fill_strct(t_pipex **pipex, int ac, char **argv, char **envp)
 			(*pipex)->type_redir = IN;
 		}
 		*pipex = (*pipex)->next;
-		if (start->type_redir == HEREDOC && i == 2)
-		{
-			(*pipex)->redir = argv[ac];
-			(*pipex)->type_redir = IN;
-		}
+		// if (start->type_redir == HEREDOC && i == 2)
+		// {
+		// 	(*pipex)->redir = argv[ac];
+		// 	(*pipex)->type_redir = IN;
+		// }
 	}
 	(*pipex)->redir = argv[i];
 	(*pipex)->type_redir = OUT;

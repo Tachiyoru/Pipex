@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 11:37:40 by sleon             #+#    #+#             */
-/*   Updated: 2022/11/28 18:55:10 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/01 14:15:21 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	free_struct(t_pipex *pipex)
 
 	while (pipex)
 	{
+		if (pipex_)
 		i = 0;
 		free_tab(pipex->cmd_detail);
 		free(pipex->cmd);

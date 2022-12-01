@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 15:29:07 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/01 12:55:05 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/01 14:13:12 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	heredoc(char *limiter)
 		if (!ft_strncmp(limiter, buf, ft_strlen(limiter)))
 			break ;
 		write(file, buf, ft_strlen(buf));
-		write(file, "\n", 1);
+		// write(file, "\n", 1);
 		free(buf);
 	}
 	free(buf);

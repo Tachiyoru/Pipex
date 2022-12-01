@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 16:06:40 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/01 12:33:10 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/01 14:14:26 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ void	main_exec(t_pipex *pipex)
 	{
 		if (pipex->type_redir != DEFAULT)
 			setup_redir(pipex);
+		if (pipex->type_redir == HEREDOC)
+		{
+			pipex->next->fd[IN] = pipex->fd[IN];
+			pipex = pipex->next;
+			setup_redir(pipex);
+		}
 		if (pipex->next)
 		{
 			pipe(tmp_pipe);
@@ -109,7 +115,8 @@ int	exec(t_pipex *pipex)
 			dup2(pipex->fd[OUT], STDOUT_FILENO);
 			close(pipex->fd[OUT]);
 		}
-		// dprintf(STDERR_FILENO, "%s\n", pipex->cmd);
+		if (pipex->type_redir == HEREDOC)
+			return (0);
 		if (pipex->cmd == NULL)
 			return (msg("Execve failed"), exit(1), false);
 		else
