@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 15:47:09 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/02 11:01:20 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/02 11:35:04 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char		*command_finder(char **path, char *command);
 char		*ft_strdup(char *s);
 
 //here-doc
-int			is_heredoc(char *arg, t_pipex *pipex, char **envp);
+int			is_argc_ok(int argc, char *argv);
 int			heredoc(char *limiter);
 
 //split

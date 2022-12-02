@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:03:23 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/02 11:02:31 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/02 12:08:50 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	init_struct(t_pipex **node, char **envp, char *cmd, int i)
 	tmp->cmd_detail = ft_split(tmp->cmd, ' ');
 	res_split = ft_split(path_finder(tmp->env), ':');
 	tmp->cmd = command_finder(res_split, tmp->cmd_detail[0]);
+	free(tmp->cmd_detail[0]);
 	tmp->cmd_detail[0] = ft_strdup(tmp->cmd);
 	free_tab(res_split);
 	if (i != 1)
