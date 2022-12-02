@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 15:47:09 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/01 11:36:49 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/02 11:01:20 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ char		*ft_strjoin(char *s1, char *s2);
 size_t		ft_strlen(char *str);
 void		msg(char *str);
 
+//utils2
+char		*path_finder(char **envp);
+char		*command_finder(char **path, char *command);
+char		*ft_strdup(char *s);
+
 //here-doc
 int			is_heredoc(char *arg, t_pipex *pipex, char **envp);
 int			heredoc(char *limiter);
@@ -70,16 +75,13 @@ void		free_tab(char **tab);
 //main
 int			main(int argc, char **argv, char **envp);
 void		main_exec(t_pipex *pipex);
+void		sub_exec(t_pipex *pipex);
 void		setup_redir(t_pipex *pipex);
 int			exec(t_pipex *pipex);
 
-int	init_struct2(t_pipex **node, char **envp, char *cmd, int i);
-
 //struct
 int			fill_strct(t_pipex **pipex, int ac, char **argv, char **envp);
+int			init_struct2(t_pipex **node, char **envp, char *cmd, char *lim);
 int			init_struct(t_pipex **prev, char **envp, char *cmd, int i);
-char		*path_finder(char **envp);
-char		*command_finder(char **path, char *command);
-char		*ft_strdup(char *s);
 
 #endif

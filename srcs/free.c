@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 11:37:40 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/01 14:15:21 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/02 10:23:38 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,24 @@
 
 void	free_struct(t_pipex *pipex)
 {
-	int		i;
 	t_pipex	*save;
 
 	while (pipex)
 	{
-		if (pipex_)
-		i = 0;
-		free_tab(pipex->cmd_detail);
-		free(pipex->cmd);
-		save = pipex;
-		pipex = pipex->next;
-		free(save);
+		if (pipex->type_redir == HEREDOC)
+		{
+			save = pipex;
+			pipex = pipex->next;
+			free(save);
+		}
+		else
+		{
+			free_tab(pipex->cmd_detail);
+			free(pipex->cmd);
+			save = pipex;
+			pipex = pipex->next;
+			free(save);
+		}
 	}
 	free(pipex);
 }

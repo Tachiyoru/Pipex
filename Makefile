@@ -9,6 +9,7 @@ SRCS			=	${SRCS_DIR}main.c				\
 					${SRCS_DIR}struct.c				\
 					${SRCS_DIR}split.c				\
 					${SRCS_DIR}utils.c				\
+					${SRCS_DIR}utils2.c				\
 					${SRCS_DIR}free.c				\
 					${GNL_DIR}get_next_line.c		\
 					${GNL_DIR}get_next_line_utils.c

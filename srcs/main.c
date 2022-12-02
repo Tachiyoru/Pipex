@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 16:06:40 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/01 14:14:26 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/02 10:58:22 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,43 +29,50 @@ int	main(int argc, char **argv, char **envp)
 	}
 	main_exec(pipex);
 	free_struct(pipex);
-	dprintf(STDERR_FILENO, "ok\n");
 	return (EXIT_SUCCESS);
 }
 
 void	main_exec(t_pipex *pipex)
 {
 	t_pipex	*start;
-	int		tmp_pipe[MAX_FD];
 
 	start = pipex;
 	while (pipex)
 	{
-		if (pipex->type_redir != DEFAULT)
-			setup_redir(pipex);
+		sub_exec(pipex);
 		if (pipex->type_redir == HEREDOC)
-		{
-			pipex->next->fd[IN] = pipex->fd[IN];
 			pipex = pipex->next;
-			setup_redir(pipex);
-		}
-		if (pipex->next)
-		{
-			pipe(tmp_pipe);
-			pipex->fd[OUT] = tmp_pipe[OUT];
-			pipex->next->fd[IN] = tmp_pipe[IN];
-		}
 		exec(pipex);
 		close(pipex->fd[IN]);
 		close(pipex->fd[OUT]);
 		pipex = pipex->next;
 	}
 	pipex = start;
+	while (pipex)
 	{
 		waitpid(pipex->pid, NULL, 0);
 		pipex = pipex->next;
 	}
-	return ;
+}
+
+void	sub_exec(t_pipex *pipex)
+{
+	int		tmp_pipe[MAX_FD];
+
+	if (pipex->type_redir != DEFAULT)
+		setup_redir(pipex);
+	if (pipex->type_redir == HEREDOC)
+	{
+		pipex->next->fd[IN] = pipex->fd[IN];
+		pipex = pipex->next;
+		setup_redir(pipex);
+	}
+	if (pipex->next)
+	{
+		pipe(tmp_pipe);
+		pipex->fd[OUT] = tmp_pipe[OUT];
+		pipex->next->fd[IN] = tmp_pipe[IN];
+	}
 }
 
 void	setup_redir(t_pipex *pipex)
@@ -115,15 +122,10 @@ int	exec(t_pipex *pipex)
 			dup2(pipex->fd[OUT], STDOUT_FILENO);
 			close(pipex->fd[OUT]);
 		}
-		if (pipex->type_redir == HEREDOC)
-			return (0);
 		if (pipex->cmd == NULL)
 			return (msg("Execve failed"), exit(1), false);
 		else
 			execve(pipex->cmd, pipex->cmd_detail, pipex->env);
-		perror("Error ");
 	}
 	return (true);
 }
-
-// dprintf(STDERR_FILENO, "cmd detail = %s\n", pipex->cmd);
