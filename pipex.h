@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 15:47:09 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/02 11:35:04 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/02 13:46:54 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ size_t		ft_strlen(char *str);
 void		msg(char *str);
 
 //utils2
+void		pipex_fd(t_pipex *pipex);
 char		*path_finder(char **envp);
 char		*command_finder(char **path, char *command);
 char		*ft_strdup(char *s);

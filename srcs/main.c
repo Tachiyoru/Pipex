@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 16:06:40 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/02 13:22:58 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/02 13:47:11 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	main_exec(t_pipex *pipex)
 		sub_exec(pipex);
 		if (pipex->type_redir == HEREDOC)
 			pipex = pipex->next;
-		dprintf(STDERR_FILENO, "2 fd in = %d fd out = %d\n", pipex->fd[IN], pipex->fd[OUT]);
 		exec(pipex);
 		close(pipex->fd[IN]);
 		close(pipex->fd[OUT]);
@@ -109,18 +108,7 @@ int	exec(t_pipex *pipex)
 		pipex->pid = pid;
 	else
 	{
-		dprintf(STDERR_FILENO, "1 fd in = %d fd out = %d\n", pipex->fd[IN], pipex->fd[OUT]);
-		dprintf(STDERR_FILENO, "1 stdin = %d stdout = %d\n", STDIN_FILENO, STDOUT_FILENO);
-		if (pipex->fd[IN] != STDIN_FILENO)
-		{
-			dup2(pipex->fd[IN], STDIN_FILENO);
-			close(pipex->fd[IN]);
-		}
-		if (pipex->fd[OUT] != STDOUT_FILENO)
-		{
-			dup2(pipex->fd[OUT], STDOUT_FILENO);
-			close(pipex->fd[OUT]);
-		}
+		pipex_fd(pipex);
 		if (pipex->next && pipex->next->fd[IN] != STDIN_FILENO)
 			close(pipex->next->fd[IN]);
 		if (pipex->cmd == NULL)

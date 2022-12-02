@@ -6,11 +6,25 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 11:02:34 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/02 11:57:42 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/02 13:46:28 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	pipex_fd(t_pipex *pipex)
+{
+	if (pipex->fd[IN] != STDIN_FILENO)
+	{
+		dup2(pipex->fd[IN], STDIN_FILENO);
+		close(pipex->fd[IN]);
+	}
+	if (pipex->fd[OUT] != STDOUT_FILENO)
+	{
+		dup2(pipex->fd[OUT], STDOUT_FILENO);
+		close(pipex->fd[OUT]);
+	}
+}
 
 char	*path_finder(char **envp)
 {

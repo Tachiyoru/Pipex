@@ -16,9 +16,9 @@ SRCS			=	${SRCS_DIR}main.c				\
 
 OBJS			=	$(SRCS:%.c=%.o)
 
+DEFAULT			=	\033[0m
 RED				=	\033[1;31m
 GREEN			=	\033[1;32m
-DEFAULT			=	\033[0m
 
 CFLAGS			=	-Wall -Werror -Wextra -fstandalone-debug -g3 -I.
 
