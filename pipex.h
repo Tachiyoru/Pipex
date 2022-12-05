@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 15:47:09 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/02 13:46:54 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/05 13:57:18 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int			exec(t_pipex *pipex);
 
 //struct
 int			fill_strct(t_pipex **pipex, int ac, char **argv, char **envp);
+void		ft_lst(t_pipex **node, t_pipex *tmp, int i);
 int			init_struct2(t_pipex **node, char **envp, char *cmd, char *lim);
 int			init_struct(t_pipex **prev, char **envp, char *cmd, int i);
 

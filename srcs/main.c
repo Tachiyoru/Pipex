@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 16:06:40 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/02 13:47:11 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/05 13:48:34 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,10 @@ int	exec(t_pipex *pipex)
 		if (pipex->next && pipex->next->fd[IN] != STDIN_FILENO)
 			close(pipex->next->fd[IN]);
 		if (pipex->cmd == NULL)
-			return (msg("Execve failed"), exit(1), false);
+			return (msg("Execve failed, bad address"), false);
 		else
 			execve(pipex->cmd, pipex->cmd_detail, pipex->env);
+		dprintf(STDERR_FILENO, "oui");
 	}
 	return (true);
 }

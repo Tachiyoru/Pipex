@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:03:23 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/02 13:35:30 by sleon            ###   ########.fr       */
+/*   Updated: 2022/12/05 13:59:08 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,22 @@ int	init_struct(t_pipex **node, char **envp, char *cmd, int i)
 	tmp->cmd_detail = ft_split(tmp->cmd, ' ');
 	res_split = ft_split(path_finder(tmp->env), ':');
 	tmp->cmd = command_finder(res_split, tmp->cmd_detail[0]);
-	free(tmp->cmd_detail[0]);
-	tmp->cmd_detail[0] = ft_strdup(tmp->cmd);
+	if (tmp->cmd != NULL)
+	{
+		free(tmp->cmd_detail[0]);
+		tmp->cmd_detail[0] = ft_strdup(tmp->cmd);
+	}
 	free_tab(res_split);
+	ft_lst(node, tmp, i);
+	return (true);
+}
+
+void	ft_lst(t_pipex **node, t_pipex *tmp, int i)
+{
 	if (i != 1)
 		(*node)->next = tmp;
 	else
 		(*node) = tmp;
-	return (true);
 }
 
 int	init_struct2(t_pipex **node, char **envp, char *cmd, char *lim)
