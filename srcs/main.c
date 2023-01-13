@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 16:06:40 by sleon             #+#    #+#             */
-/*   Updated: 2022/12/05 13:48:34 by sleon            ###   ########.fr       */
+/*   Updated: 2023/01/13 19:33:50 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,26 @@ int	main(int argc, char **argv, char **envp)
 void	main_exec(t_pipex *pipex)
 {
 	t_pipex	*start;
+	int		i;
 
+	i = 0;
 	start = pipex;
 	while (pipex)
 	{
 		sub_exec(pipex);
 		if (pipex->type_redir == HEREDOC)
 			pipex = pipex->next;
-		exec(pipex);
+		exec(pipex, i);
 		close(pipex->fd[IN]);
 		close(pipex->fd[OUT]);
 		pipex = pipex->next;
+		i++;
 	}
 	pipex = start;
 	while (pipex)
 	{
-		waitpid(pipex->pid, NULL, 0);
+		waitpid(pipex->pid[0], NULL, 0);
+		waitpid(pipex->pid[1], NULL, 0);
 		pipex = pipex->next;
 	}
 }
@@ -79,14 +83,20 @@ void	setup_redir(t_pipex *pipex)
 	{
 		fd = open(pipex->redir, O_RDONLY);
 		if (fd == -1)
-			return ;
+			return ; //valeur de retour si ca foire continue po
 		pipex->fd[IN] = fd;
+		pipex->heredoc = 0;
 	}
 	else if (pipex->type_redir == OUT)
 	{
-		fd = open(pipex->redir, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-			return ;
+		if (pipex->heredoc == 1)
+			fd = open(pipex->redir, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+		{
+			fd = open(pipex->redir, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd == -1)
+				return ;
+		}
 		pipex->fd[OUT] = fd;
 	}
 	else if (pipex->type_redir == HEREDOC)
@@ -97,7 +107,7 @@ void	setup_redir(t_pipex *pipex)
 	return ;
 }
 
-int	exec(t_pipex *pipex)
+int	exec(t_pipex *pipex, int i)
 {
 	pid_t			pid;
 
@@ -105,7 +115,7 @@ int	exec(t_pipex *pipex)
 	if (pid == -1)
 		return (false);
 	if (pid > 0)
-		pipex->pid = pid;
+		pipex->pid[i] = pid;
 	else
 	{
 		pipex_fd(pipex);
@@ -115,7 +125,6 @@ int	exec(t_pipex *pipex)
 			return (msg("Execve failed, bad address"), false);
 		else
 			execve(pipex->cmd, pipex->cmd_detail, pipex->env);
-		dprintf(STDERR_FILENO, "oui");
 	}
 	return (true);
 }
