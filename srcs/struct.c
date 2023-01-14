@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:03:23 by sleon             #+#    #+#             */
-/*   Updated: 2023/01/13 19:22:56 by sleon            ###   ########.fr       */
+/*   Updated: 2023/01/14 11:33:30 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,10 @@ int	fill_strct(t_pipex **pipex, int ac, char **argv, char **envp)
 	if (!ft_strncmp("here_doc", argv[0], 9))
 		init_struct2(pipex, envp, argv[0], argv[1]);
 	else
-	{
-		while (!ft_strncmp(" ", argv[i], 1))
-		{
-			i++;
-			msg("cmd not found");
-		}
 		init_struct(pipex, envp, argv[i], 1);
-	}
 	start = *pipex;
 	while (++i < ac)
 	{
-		while (!ft_strncmp(" ", argv[i], 1))
-			i++;
 		init_struct(pipex, envp, argv[i], i);
 		if ((i == 2 && start->type_redir != HEREDOC))
 		{
@@ -48,6 +39,16 @@ int	fill_strct(t_pipex **pipex, int ac, char **argv, char **envp)
 		(*pipex)->heredoc = 1;
 	*pipex = start;
 	return (true);
+}
+
+void	init_struct3(t_pipex *tmp, char **res_split)
+{
+	tmp->cmd = command_finder(res_split, tmp->cmd_detail[0]);
+	if (tmp->cmd != NULL)
+	{
+		free(tmp->cmd_detail[0]);
+		tmp->cmd_detail[0] = ft_strdup(tmp->cmd);
+	}
 }
 
 int	init_struct(t_pipex **node, char **envp, char *cmd, int i)
@@ -68,14 +69,8 @@ int	init_struct(t_pipex **node, char **envp, char *cmd, int i)
 	tmp->type_redir = DEFAULT;
 	tmp->cmd_detail = ft_split(tmp->cmd, ' ');
 	res_split = ft_split(path_finder(tmp->env), ':');
-	if (!tmp->cmd)
-		return (false);
-	tmp->cmd = command_finder(res_split, tmp->cmd_detail[0]);
-	if (tmp->cmd != NULL)
-	{
-		free(tmp->cmd_detail[0]);
-		tmp->cmd_detail[0] = ft_strdup(tmp->cmd);
-	}
+	if (ft_strncmp("", cmd, 1))
+		init_struct3(tmp, res_split);
 	free_tab(res_split);
 	ft_lst(node, tmp, i);
 	return (true);

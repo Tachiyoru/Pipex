@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 15:47:09 by sleon             #+#    #+#             */
-/*   Updated: 2023/01/13 19:34:11 by sleon            ###   ########.fr       */
+/*   Updated: 2023/01/14 11:04:35 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ enum e_fd{
 
 struct s_pipex
 {
-	pid_t	pid[2];
+	pid_t	pid;
 	int		fd[MAX_FD];
 	int		heredoc;
 	char	*path;
@@ -77,9 +77,9 @@ void		free_tab(char **tab);
 //main
 int			main(int argc, char **argv, char **envp);
 void		main_exec(t_pipex *pipex);
-void		sub_exec(t_pipex *pipex);
-void		setup_redir(t_pipex *pipex);
-int			exec(t_pipex *pipex, int i);
+int			sub_exec(t_pipex *pipex);
+int			setup_redir(t_pipex *pipex);
+int			exec(t_pipex *pipex);
 
 //struct
 int			fill_strct(t_pipex **pipex, int ac, char **argv, char **envp);

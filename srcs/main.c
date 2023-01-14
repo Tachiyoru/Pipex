@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 16:06:40 by sleon             #+#    #+#             */
-/*   Updated: 2023/01/13 19:33:50 by sleon            ###   ########.fr       */
+/*   Updated: 2023/01/14 11:09:03 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,11 @@ void	main_exec(t_pipex *pipex)
 	start = pipex;
 	while (pipex)
 	{
-		sub_exec(pipex);
+		if (!sub_exec(pipex))
+			return ;
 		if (pipex->type_redir == HEREDOC)
 			pipex = pipex->next;
-		exec(pipex, i);
+		exec(pipex);
 		close(pipex->fd[IN]);
 		close(pipex->fd[OUT]);
 		pipex = pipex->next;
@@ -49,23 +50,26 @@ void	main_exec(t_pipex *pipex)
 	pipex = start;
 	while (pipex)
 	{
-		waitpid(pipex->pid[0], NULL, 0);
-		waitpid(pipex->pid[1], NULL, 0);
+		waitpid(pipex->pid, NULL, 0);
 		pipex = pipex->next;
 	}
 }
 
-void	sub_exec(t_pipex *pipex)
+int	sub_exec(t_pipex *pipex)
 {
 	int		tmp_pipe[MAX_FD];
 
 	if (pipex->type_redir != DEFAULT)
-		setup_redir(pipex);
+	{
+		if (!setup_redir(pipex))
+			return (msg("Could not open fd"), 0);
+	}
 	if (pipex->type_redir == HEREDOC)
 	{
 		pipex->next->fd[IN] = pipex->fd[IN];
 		pipex = pipex->next;
-		setup_redir(pipex);
+		if (!setup_redir(pipex))
+			return (msg("Could not open fd"), 0);
 	}
 	if (pipex->next)
 	{
@@ -73,9 +77,10 @@ void	sub_exec(t_pipex *pipex)
 		pipex->fd[OUT] = tmp_pipe[OUT];
 		pipex->next->fd[IN] = tmp_pipe[IN];
 	}
+	return (1);
 }
 
-void	setup_redir(t_pipex *pipex)
+int	setup_redir(t_pipex *pipex)
 {
 	int	fd;
 
@@ -83,7 +88,7 @@ void	setup_redir(t_pipex *pipex)
 	{
 		fd = open(pipex->redir, O_RDONLY);
 		if (fd == -1)
-			return ; //valeur de retour si ca foire continue po
+			return (false); //valeur de retour si ca foire continue po
 		pipex->fd[IN] = fd;
 		pipex->heredoc = 0;
 	}
@@ -95,7 +100,7 @@ void	setup_redir(t_pipex *pipex)
 		{
 			fd = open(pipex->redir, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (fd == -1)
-				return ;
+				return (false);
 		}
 		pipex->fd[OUT] = fd;
 	}
@@ -104,10 +109,10 @@ void	setup_redir(t_pipex *pipex)
 		fd = heredoc(pipex->redir);
 		pipex->fd[IN] = fd;
 	}
-	return ;
+	return (true);
 }
 
-int	exec(t_pipex *pipex, int i)
+int	exec(t_pipex *pipex)
 {
 	pid_t			pid;
 
@@ -115,7 +120,7 @@ int	exec(t_pipex *pipex, int i)
 	if (pid == -1)
 		return (false);
 	if (pid > 0)
-		pipex->pid[i] = pid;
+		pipex->pid = pid;
 	else
 	{
 		pipex_fd(pipex);
