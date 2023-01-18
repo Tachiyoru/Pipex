@@ -6,16 +6,21 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 15:29:07 by sleon             #+#    #+#             */
-/*   Updated: 2023/01/17 18:34:35 by sleon            ###   ########.fr       */
+/*   Updated: 2023/01/18 16:59:11 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 #include "../GNL/get_next_line.h"
 
-int	is_argc_ok1(int argc)
+int	is_argc_ok(int argc, char *argv)
 {
-	if (argc < 5 || argc > 5)
+	if (!ft_strncmp("here_doc", argv, 9) && argc < 6)
+	{
+		msg("Pipex run as : ./pipex here_doc LIMITER cmd cmd1 file");
+		return (0);
+	}
+	else if (argc < 5)
 	{
 		msg("Pipex run as: ./pipex infile cmd1 ... cmdX outfile");
 		return (0);

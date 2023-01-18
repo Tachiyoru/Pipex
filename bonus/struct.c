@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/28 12:03:23 by sleon             #+#    #+#             */
-/*   Updated: 2023/01/18 17:53:53 by sleon            ###   ########.fr       */
+/*   Updated: 2023/01/18 17:12:39 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ int	init_struct(t_pipex **node, char **envp, char *cmd, int i)
 	tmp = ft_calloc(1, sizeof(t_pipex));
 	if (!tmp)
 		return (false);
-	set_tmp(tmp);
 	tmp->cmd = cmd;
 	tmp->env = envp;
+	set_tmp(tmp);
 	tmp->cmd_detail = ft_split(tmp->cmd, ' ');
 	if (!ft_strchr(tmp->cmd, '/'))
 	{
@@ -98,7 +98,6 @@ int	init_struct2(t_pipex **node, char **envp, char *cmd, char *lim)
 	if (!tmp)
 		return (false);
 	tmp->cmd = cmd;
-	envp = NULL;
 	tmp->env = envp;
 	tmp->pid = -1;
 	tmp->heredoc = 1;

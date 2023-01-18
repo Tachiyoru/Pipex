@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 16:06:40 by sleon             #+#    #+#             */
-/*   Updated: 2023/01/18 17:57:17 by sleon            ###   ########.fr       */
+/*   Updated: 2023/01/18 17:41:14 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	*pipex;
 	int		fd;
 
-	if (!is_argc_ok1(argc))
+	if (!is_argc_ok(argc, argv[1]))
 		return (EXIT_FAILURE);
 	fd = 0;
 	fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
