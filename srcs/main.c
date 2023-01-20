@@ -6,7 +6,7 @@
 /*   By: sleon <sleon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 16:06:40 by sleon             #+#    #+#             */
-/*   Updated: 2023/01/18 17:57:17 by sleon            ###   ########.fr       */
+/*   Updated: 2023/01/19 12:34:16 by sleon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	exec(t_pipex *pipex, t_pipex *start)
 		pipex_fd(pipex);
 		if (pipex->next && pipex->next->fd[IN] != STDIN_FILENO)
 			close(pipex->next->fd[IN]);
-		if (access(pipex->cmd_detail[0], 0) != 0)
+		if (!ft_strncmp("", pipex->cmd, 1) || access(pipex->cmd_detail[0], 0) != 0)
 		{
 			close(pipex->fd[IN]);
 			close(pipex->fd[OUT]);
